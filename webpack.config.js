@@ -3,6 +3,7 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 module.exports = (env, argv) => {
 
@@ -10,7 +11,25 @@ module.exports = (env, argv) => {
     const isDev = !isProd
 
     const fileName = (ext) => isProd ? `[name].[contenthash].bundle.${ext}` : `[name].bundle.${ext}`
-        
+    const plugins = () => {
+        const base = [
+            new HtmlWebpackPlugin({
+                template: './index.html'
+            }),
+            new FaviconsWebpackPlugin({
+                logo: './favicon.ico'
+            }),
+            new MiniCssExtractPlugin({
+                filename: fileName('css')
+            }  
+            ),
+            
+        ]
+        if (isDev) {
+            base.push(new ESLintPlugin())
+        }
+        return base
+    }
     
 
     return {
@@ -36,18 +55,7 @@ module.exports = (env, argv) => {
                 'core': path.resolve(__dirname, 'src', 'core')
             }
         },
-        plugins: [
-            new HtmlWebpackPlugin({
-                template: './index.html'
-            }),
-            new FaviconsWebpackPlugin({
-                logo: './favicon.ico'
-            }),
-            new MiniCssExtractPlugin({
-                filename: fileName('css')
-            }  
-            )
-        ],
+        plugins: plugins(),
         devServer: {
             port: '3000',
             open: true,
