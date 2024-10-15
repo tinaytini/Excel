@@ -14,6 +14,7 @@ module.exports = (env, argv) => {
     
 
     return {
+        target: 'web',
         context: path.resolve(__dirname, 'src'),
         entry: {
             main:
@@ -47,6 +48,12 @@ module.exports = (env, argv) => {
             }  
             )
         ],
+        devServer: {
+            port: '3000',
+            open: true,
+            hot: true,
+            watchFiles: './'
+        },
         devtool: isDev ? 'eval-source-map' : 'source-map',
         module: {
             rules: [
