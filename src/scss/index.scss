@@ -5,6 +5,7 @@
 @import "header";
 @import "table";
 @import "toolbar";
+@import "dashboard";
 
 * {
     margin: 0;
@@ -22,5 +23,5 @@ body {
     color: #888;
     height: 100%;
     max-width: 100%;
-    
+
 }
