@@ -60,7 +60,7 @@ module.exports = (env, argv) => {
             port: '3000',
             open: true,
             hot: true,
-            watchFiles: './'
+            watchFiles: './',
         },
         devtool: isDev ? 'eval-source-map' : 'source-map',
         module: {
@@ -74,6 +74,7 @@ module.exports = (env, argv) => {
                         "css-loader",
                         // Compiles Sass to CSS
                         "sass-loader",
+
                     ],
                 },
                 {

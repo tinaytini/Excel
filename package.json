@@ -34,10 +34,12 @@
   "dependencies": {
     "@babel/eslint-parser": "^7.25.8",
     "@babel/polyfill": "^7.12.1",
+    "@material/web": "^2.2.0",
     "core-js": "^3.9.0",
     "eslint-config-google": "^0.14.0",
     "favicons-webpack-plugin": "^6.0.1",
     "i": "^0.3.7",
+    "normalize.css": "^8.0.1",
     "npm": "^10.9.0",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.79.5",
