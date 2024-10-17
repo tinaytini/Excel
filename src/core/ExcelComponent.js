@@ -1,5 +1,9 @@
 import { DomListener } from "./DomListener";
 
+
 export class ExcelComponent extends DomListener {
-    toHTML() {return ''}
+    // vozvrashaet shablon componenta
+    toHTML() {
+        return ''
+    }
 }
