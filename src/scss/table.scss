@@ -91,8 +91,8 @@
         background-color: #3c74ff;
         opacity: 0;
 
-        &:active {
-            opacity: 1;
+        &:hover {
+            opacity: 1!important;
         }
     }
 

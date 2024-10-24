@@ -18,44 +18,53 @@ export class Table extends ExcelComponent {
 
 
     onMousedown(event) {
-        if (event.target.dataset.resize === 'col') {
+        const type = event.target.dataset.resize
+        if (type) {
             const $resizer = $(event.target)
-            const $parentCol = $resizer.closest('[data-type="resizable-column"]')
-            const coordsCol = $parentCol.getCoords()
-            const cells = this.$root.findAll(`[data-col="${$parentCol.$el.dataset.col}"]`)
-
+            const $parent = $resizer.closest('[data-type="resizable"]')
+            const coords = $parent.getCoords()
+            let value;
+            const cells = this.$root.findAll(`[data-col="${$parent.$el.dataset.col}"]`)
+            const sideProp = type === 'col' ? 'bottom' : 'right'
+            $resizer.css({
+                opacity: 1,
+                zIndex: 1000,
+                [sideProp]: '-5000px'
+            })
+            
+            
             document.onmousemove = e => {
-                const deltaCol = e.pageX - coordsCol.$el.right
-                const valueCol = coordsCol.$el.width + deltaCol
-                $parentCol.$el.style.width = valueCol + 'px'
-                cells.forEach(el => {
-                    el.style.width = valueCol + 'px';
-                    el.classList.add('active')
-                    console.log(el)
-                })
-                
+                if (type === 'col') {
+                    const deltaCol = e.pageX - coords.$el.right
+                    value = coords.$el.width + deltaCol
+                    $resizer.css({right: -deltaCol + 'px'})
+                } else {
+                    const deltaRow = e.pageY - coords.$el.bottom
+                    value = coords.$el.height + deltaRow
+                    $resizer.css({bottom: -deltaRow + 'px'})
+                }
 
                 document.onmouseup = (e) => {
+                    if (type === 'col') {
+                        $parent.css({width: value + 'px'})
+                        cells.forEach(el => {
+                            el.style.width = value + 'px';
+                        })
+                    } 
+                    if (type === 'row') {
+                        $parent.css({height: value + 'px'})
+                    }
                     document.onmousemove = null
+                    document.onmouseup = null
+                    $resizer.css({
+                        opacity: 0,
+                        bottom: 0,
+                        right: 0,
+                    })
+                    
                 }
             }
         }
-
-            if (event.target.dataset.resize === 'row') {
-                const $resizer = $(event.target)
-                console.log($resizer)
-                const $parentRow = $resizer.closest('[data-type="resizable-row"]')
-                const coordsRow = $parentRow.getCoords()
-
-                document.onmousemove = e => {
-                    const deltaRow = e.pageY - coordsRow.$el.bottom
-                    const valueRow = coordsRow.$el.height + deltaRow
-                    $parentRow.$el.style.height = valueRow + 'px'
-                }
-                document.onmouseup = (e) => {
-                    document.onmousemove = null
-                }
-            }
 
     }
 
