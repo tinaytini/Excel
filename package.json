@@ -42,6 +42,7 @@
     "i": "^0.3.7",
     "normalize.css": "^8.0.1",
     "npm": "^10.9.0",
+    "openai": "^4.68.4",
     "regenerator-runtime": "^0.14.1",
     "sass": "^1.79.5",
     "sass-loader": "^16.0.2",
