@@ -1,0 +1,59 @@
+@import "_mixins";
+@import "_variables";
+.excel__modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+
+    .modal__result {
+        font-size: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 4px;
+    }
+
+    .modal {
+        background-color: #3e8ef7;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 600px;
+        color: #fff;
+    }
+    
+    h2 {
+        padding: 4px 4px 8px 4px;
+    }
+    & .inputWrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        input {
+            width: 200px;
+            padding: 4px 2px;
+            font-size: 12px;
+            margin-right: 2px
+        }
+        button {
+            padding: 4px 8px;
+            outline: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 8px;
+
+            &:focus {
+                outline: 3px solid #1ec79a; /* Light purple outline */
+                outline-offset: 2px;
+            }
+        }
+    }
+    
+}

@@ -54,6 +54,11 @@ class Dom {
     findAll(selector) {
         return this.$el.querySelectorAll(selector)
     }
+
+    textContent() {
+        return this.$el.textContent
+    }
+
     id(parse) {
         if (parse) {
             const parsed = this.id().split(':')
@@ -62,9 +67,9 @@ class Dom {
                 col: +parsed[1]
             }
         }
-
         return this.$el.dataset.id
     }
+
     css(styles = {}) {
         Object.keys(styles).forEach(key => {
             this.$el.style[key] = styles[key]
@@ -76,6 +81,7 @@ class Dom {
     removeClassName(className) {
         this.$el.classList.remove(className)
     }
+
 }
 
 // event.target
@@ -90,3 +96,4 @@ $.create = (tagName, classes = '') => {
     }
     return $(el)
 }
+

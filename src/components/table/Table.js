@@ -1,16 +1,20 @@
-import { DomListener } from "../../core/DomListener";
-import { ExcelComponent } from "../../core/ExcelComponent";
 import { createTable } from "./table.template";
-import { $ } from "../../core/Dom";
+import { ExcelComponent } from "../../core/ExcelComponent";
+import { matrix } from "./table.functions";
 import { resizeHandler } from "./table.resize"
+
 import { TableSelection } from "./Selection";
+import { $ } from "../../core/Dom";
+import { Modal } from "../modal/modal";
+
+
 
 export class Table extends ExcelComponent {
     static className = 'excel__table'
-
+    
     constructor($root) {
         super($root, {
-            listeners: ['mousedown']
+            listeners: ['mousedown', 'keydown', 'click']
         })
     }
 
@@ -20,16 +24,15 @@ export class Table extends ExcelComponent {
 
     prepare() {
         this.selection = new TableSelection()
+
     }
 
     init() {
         super.init()
 
         const $cell = this.$root.find('[data-id="0:0"]')
-        console.log($cell)
         this.selection.select($cell)
     }
-
 
     onMousedown(event) {
         const type = event.target.dataset.resize
@@ -39,34 +42,44 @@ export class Table extends ExcelComponent {
             //cell selection
         } else if (event.target.dataset.type === 'cell') {
             const $target = $(event.target)
+            
             if (event.shiftKey) {
                 const target = $target.id(true)
                 const current = this.selection.current.id(true)
 
-                const cols = range(current.col, target.col)
-                const rows = range(current.row, target.row)
+                const $cells = matrix(target, current).map(id => this.$root.find(`[data-id="${id}"]`))
+                this.selection.selectGroup($cells)
+                
+                textValues = $cells.map($cell => {
+                    return $cell.textContent()
+                })
+                const $modal = $('.excel__modal');
+                $modal.css({display: "flex"});
 
-                const ids = cols.reduce((acc, col) => {
-                    rows.forEach(row => acc.push(`${row}:${col}`))
-                    return acc
-                }, [])
-                console.log(ids)
             } else {
                 this.selection.select($target)
-
             }
         }
     }
 
-} 
-const range = (start, end) => {
-    if (start > end) {
-        [] = [start, end]
-        [end, start] = [start, end]
+    onClick(event) {
+        const $target = $(event.target)
+        const id = $target.id()
+        const $cell = this.$root.find(`[data-id="${id}"]`)
     }
-    return new Array(end - start + 1)
-        .fill('')
-        .map((_, index) =>  start + index)
-}
-//input: 0, 3
-//output: [0, 1, 2, 3]
+
+    onKeydown(event) {
+        let $target = $(event.target);
+
+        switch (event.key) {
+            case "ArrowDown":
+                const $cell = this.$root.find(`[data-id="${0}:${0}"]`)
+                this.selection.selectNextRow($cell);
+                $target = $cell
+        }
+    }
+    
+
+} 
+
+export let textValues = [];

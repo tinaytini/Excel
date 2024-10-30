@@ -17,7 +17,15 @@ export class TableSelection {
         this.group.forEach($el => $el.removeClassName(TableSelection.className))
         this.group = []
     }
-    selectGroup() {
+    selectGroup($group = []) {
+        this.clear()
+        this.group = $group
+        this.group.forEach($el => 
+            $el.addClassName(TableSelection.className)
+        )
 
+    }
+    selectNextRow($el) { 
+        console.log()
     }
 }

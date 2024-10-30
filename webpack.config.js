@@ -1,4 +1,6 @@
 //This imports Node.js's built-in path module, which helps with handling file and directory paths.
+require('dotenv').config({ path: "./.env" })
+const webpack = require("webpack")
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
@@ -21,8 +23,10 @@ module.exports = (env, argv) => {
             }),
             new MiniCssExtractPlugin({
                 filename: fileName('css')
-            }  
-            ),
+            }),
+            new webpack.DefinePlugin({
+                'process.env.OPENAI_API_KEY': JSON.stringify(process.env.OPENAI_API_KEY)
+            })
             
         ]
         if (isDev) {
