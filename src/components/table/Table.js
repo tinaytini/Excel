@@ -69,14 +69,23 @@ export class Table extends ExcelComponent {
     }
 
     onKeydown(event) {
-        let $target = $(event.target);
-
-        switch (event.key) {
-            case "ArrowDown":
-                const $cell = this.$root.find(`[data-id="${0}:${0}"]`)
-                this.selection.selectNextRow($cell);
-                $target = $cell
+        const keys = [ 
+            'Enter', 
+            'Tab', 
+            'ArrowLeft', 
+            'ArrowRight', 
+            'ArrowDown', 
+            'ArrowUp'
+        ]
+        
+        const {key} = event
+        if (keys.includes(key) && !event.shiftKey) {
+            event.preventDefault()
+            const id = this.selection.current.id(true)
+            const $next = this.$root.find(nextSelector(key, id))
+            this.selection.select($next)
         }
+
     }
     
 

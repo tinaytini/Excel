@@ -81,7 +81,10 @@ class Dom {
     removeClassName(className) {
         this.$el.classList.remove(className)
     }
-
+    focus() {
+        this.$el.focus()
+        return this
+    }
 }
 
 // event.target

@@ -9,6 +9,7 @@ export class TableSelection {
     select($el) {
         this.clear()  
         this.group.push($el)
+        $el.focus().addClassName(TableSelection.className)
         this.current = $el
         $el.addClassName(TableSelection.className)
     }
@@ -25,7 +26,5 @@ export class TableSelection {
         )
 
     }
-    selectNextRow($el) { 
-        console.log()
-    }
+    
 }
