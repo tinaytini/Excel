@@ -6,16 +6,21 @@ import { resizeHandler } from "./table.resize"
 import { TableSelection } from "./Selection";
 import { $ } from "../../core/Dom";
 import { Modal } from "../modal/modal";
+import { nextSelector } from "./table.functions";
 
 
 
 export class Table extends ExcelComponent {
     static className = 'excel__table'
     
-    constructor($root) {
+    //options = {}
+    constructor($root, options) {
         super($root, {
-            listeners: ['mousedown', 'keydown', 'click']
+            name: 'Table',
+            listeners: ['mousedown', 'keydown', 'input'],
+            ...options
         })
+        this.unsubs = []
     }
 
     toHTML() {
@@ -32,7 +37,18 @@ export class Table extends ExcelComponent {
 
         const $cell = this.$root.find('[data-id="0:0"]')
         this.selection.select($cell)
+        this.$dispatch('table:select', $cell)
+
+        this.$on('formula:input', (text) => {
+            this.selection.current.text(text) 
+        })
+
+        this.$on('formula:done', () => {
+            this.selection.current.focus()
+        })
     }
+
+    select
 
     onMousedown(event) {
         const type = event.target.dataset.resize
@@ -62,12 +78,6 @@ export class Table extends ExcelComponent {
         }
     }
 
-    onClick(event) {
-        const $target = $(event.target)
-        const id = $target.id()
-        const $cell = this.$root.find(`[data-id="${id}"]`)
-    }
-
     onKeydown(event) {
         const keys = [ 
             'Enter', 
@@ -84,10 +94,14 @@ export class Table extends ExcelComponent {
             const id = this.selection.current.id(true)
             const $next = this.$root.find(nextSelector(key, id))
             this.selection.select($next)
+            this.$dispatch('table:select', $next)
         }
 
     }
-    
+
+    onInput(event) {
+        this.$dispatch('table:input', $(event.target))
+    }
 
 } 
 
