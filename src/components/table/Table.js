@@ -57,10 +57,19 @@ export class Table extends ExcelComponent {
         this.$dispatch({type: 'TEST'})
     }
 
+    async resizeTabe(event, type) {
+        try {
+            const data = await resizeHandler(this.$root, event, type)
+            this.$dispatch({type: 'TABLE_RESIZE', data})
+        } catch (e) {
+            console.error('table resize', e.message)
+        }
+        
+    } 
     onMousedown(event) {
         const type = event.target.dataset.resize
         if (type) { //should resize
-            resizeHandler(this.$root, event, type)
+            this.resizeTabe(event, type)
 
             //cell selection
         } else if (event.target.dataset.type === 'cell') {
