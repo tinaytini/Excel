@@ -1,4 +1,4 @@
-export class Dispatcher {
+export class Emitter {
     constructor() {
         //onclick, onkeydown ...
         this.listeners = {}
@@ -6,8 +6,8 @@ export class Dispatcher {
 
     //Ex: dispatch, fire, trigger, emit
     //Notifying the listeners if they excist
-    //table.dispatch('table:select', args = {a:1})
-    dispatch(event, ...args) {
+    //table.emit('table:select', args = {a:1})
+    emit(event, ...args) {
         if (!Array.isArray(this.listeners[event])) {
             return false
         }
@@ -33,6 +33,6 @@ export class Dispatcher {
     }
 }
 
-const dispatcher = new Dispatcher()
-const unsubscribe = dispatcher.subscribe('vladilen', data => console.log('Sub:', data))
+const emitter = new Emitter()
+const unsubscribe = emitter.subscribe('vladilen', data => console.log('Sub:', data))
 // console.log(unsubscribe())

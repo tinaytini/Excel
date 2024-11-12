@@ -1,20 +1,22 @@
 import { $ } from '../../core/Dom'
-import { Dispatcher } from '../../core/Dispatcher'
+import { Emitter } from '../../core/Emitter'
 
 export class Excel {
     constructor(selector, options) { 
         this.$el = $(selector)
         this.components = options.components || []
-        //dispatcher
-        this.dispatcher = new Dispatcher()
+        //emitter
+        this.store = options.store
+        this.emitter = new Emitter()
     }
 
     getRoot() {
         const $root = $.create('div', 'excel')
 
-        //dispatcher
+        //emitter
         const componentOptions = {
-            dispatcher: this.dispatcher
+            emitter: this.emitter,
+            store: this.store
         }
 
         this.components = this.components.map(Component => {
