@@ -2,8 +2,9 @@ const CODES = {
     A: 'A'.charCodeAt(0),
     Z: 'Z'.charCodeAt(0)
 }
+const DEFAULT_WIDTH = 120
 
-function createCell(row) {
+function createCell(state, row) {
     return function(_, col) {
         return `
         <div   
@@ -12,17 +13,26 @@ function createCell(row) {
             data-type="cell"
             data-col="${col}"
             data-id="${row}:${col}"
+            style="width: ${getWidth(state.colState, col)}"
         ></div>
     `
     }
     
 }
 
-function createCol(col, index) {
+function createCol({col, index, width}) {
     return `
-    <div class="column" data-type="resizable" data-col="${index}">
+    <div 
+        class="column" 
+        data-type="resizable" 
+        data-col="${index}"
+        style="width:${width}"
+    >
         ${col}
-        <div class="col-resize" data-resize="col"></div>
+        <div 
+            class="col-resize" 
+            data-resize="col"
+        ></div>
     </div>
     `
 }
@@ -46,14 +56,28 @@ function toChar(_, index) {
     return String.fromCharCode(CODES.A + index)
 }
 
-export function createTable(rowsCount = 30) {
+function getWidth(state, index) {
+    return (state[index] || DEFAULT_WIDTH) + 'px'
+}
+
+function withWidthFrom(state) {
+    return function(col, index) {
+        return {
+            col, index, width:getWidth(state.colState, index)
+        }
+    }
+}
+
+export function createTable(rowsCount = 30, state={}) {
+    console.log(state)
     const colsCount = CODES.Z - CODES.A + 1;
     const rows = []
 
     const cols = new Array(colsCount)
         .fill('')
         .map(toChar) // (_, index) { return String.fromCharCode(CODES.A + index)}
-        .map(createCol) //el => createCol(el)
+        .map(withWidthFrom(state))
+        .map(createCol)
         .join('')
 
     rows.push(createRow(null, cols))
@@ -61,7 +85,7 @@ export function createTable(rowsCount = 30) {
     for (let row=0; row<rowsCount; row++) {
         const cells = new Array(colsCount)
         .fill('')
-        .map(createCell(row))
+        .map(createCell(state, row))
         .join('')
     
     rows.push(createRow(row + 1, cells))
