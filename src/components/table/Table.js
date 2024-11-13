@@ -2,12 +2,11 @@ import { createTable } from "./table.template";
 import { ExcelComponent } from "../../core/ExcelComponent";
 import { matrix } from "./table.functions";
 import { resizeHandler } from "./table.resize"
-
 import { TableSelection } from "./Selection";
 import { $ } from "../../core/Dom";
 import { Modal } from "../modal/modal";
 import { nextSelector } from "./table.functions";
-
+import * as actions from '../../redux/actions'
 
 
 export class Table extends ExcelComponent {
@@ -24,7 +23,7 @@ export class Table extends ExcelComponent {
     }
 
     toHTML() {
-        return createTable()
+        return createTable(20, this.store.getState())
     }
 
     prepare() {
@@ -34,10 +33,10 @@ export class Table extends ExcelComponent {
 
     init() {
         super.init()
-
+        
         const $cell = this.$root.find('[data-id="0:0"]')
         this.selection.select($cell)
-        this.$dispatch('table:select', $cell)
+        this.$emit('table:select', $cell)
 
         this.$on('formula:input', (text) => {
             this.selection.current.text(text) 
@@ -46,14 +45,30 @@ export class Table extends ExcelComponent {
         this.$on('formula:done', () => {
             this.selection.current.focus()
         })
+        // this.$subscribe(state => {
+        //     console.log('tableState', state)
+        // })
     }
 
-    select
+    selectCell($cell) {
+        this.selection.select($cell)
+        this.$emit('table:select', $cell)
+        this.$dispatch({type: 'TEST'})
+    }
 
+    async resizeTabe(event, type) {
+        try {
+            const data = await resizeHandler(this.$root, event, type)
+            this.$dispatch(actions.tableResize(data))
+        } catch (e) {
+            console.error('table resize', e.message)
+        }
+        
+    } 
     onMousedown(event) {
         const type = event.target.dataset.resize
         if (type) { //should resize
-            resizeHandler(this.$root, event, type)
+            this.resizeTabe(event, type)
 
             //cell selection
         } else if (event.target.dataset.type === 'cell') {
@@ -73,7 +88,7 @@ export class Table extends ExcelComponent {
                 $modal.css({display: "flex"});
 
             } else {
-                this.selection.select($target)
+                this.selectCell($target)
             }
         }
     }
@@ -94,13 +109,13 @@ export class Table extends ExcelComponent {
             const id = this.selection.current.id(true)
             const $next = this.$root.find(nextSelector(key, id))
             this.selection.select($next)
-            this.$dispatch('table:select', $next)
+            this.$emit('table:select', $next)
         }
 
     }
 
     onInput(event) {
-        this.$dispatch('table:input', $(event.target))
+        this.$emit('table:input', $(event.target))
     }
 
 } 

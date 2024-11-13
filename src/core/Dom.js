@@ -92,7 +92,7 @@ class Dom {
     }
     removeClassName(className) {
         this.$el.classList.remove(className)
-        return this
+        return this 
     }
     focus() {
         this.$el.focus()
