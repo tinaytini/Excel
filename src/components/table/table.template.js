@@ -3,6 +3,15 @@ const CODES = {
     Z: 'Z'.charCodeAt(0)
 }
 const DEFAULT_WIDTH = 120
+const DEFAULT_HEIGHT = 24
+
+function getWidth(state = {}, index) {
+    return (state[index] || DEFAULT_WIDTH) + 'px'
+}
+
+function getHeight(state = {}, index) {
+    return (state[index] || DEFAULT_HEIGHT) + 'px'
+}
 
 function createCell(state, row) {
     return function(_, col) {
@@ -13,7 +22,7 @@ function createCell(state, row) {
             data-type="cell"
             data-col="${col}"
             data-id="${row}:${col}"
-            style="width: ${getWidth(state.colState, col)}"
+            style="width: ${getWidth(state, col)}"
         ></div>
     `
     }
@@ -37,11 +46,17 @@ function createCol({col, index, width}) {
     `
 }
 
-function createRow(index, content) {
+function createRow(index, content, state) {
     const resizer = index ? `<div class="row-resize"  data-resize="row"></div>` : ''
+    const height = getHeight(state, index)
     return `
-        <div class="row" data-type="resizable">
-            <div class="row_info" >
+        <div 
+            class="row" 
+            data-type="resizable" 
+            data-row="${index}"
+            style="height: ${height}"
+        >
+            <div class="row_info">
                 ${index ? index : ''}
                 ${resizer}
             </div>
@@ -56,19 +71,15 @@ function toChar(_, index) {
     return String.fromCharCode(CODES.A + index)
 }
 
-function getWidth(state, index) {
-    return (state[index] || DEFAULT_WIDTH) + 'px'
-}
-
 function withWidthFrom(state) {
     return function(col, index) {
         return {
-            col, index, width:getWidth(state.colState, index)
+            col, index, width: getWidth(state.colState, index)
         }
     }
 }
 
-export function createTable(rowsCount = 30, state={}) {
+export function createTable(rowsCount = 30, state) {
     console.log(state)
     const colsCount = CODES.Z - CODES.A + 1;
     const rows = []
@@ -85,10 +96,10 @@ export function createTable(rowsCount = 30, state={}) {
     for (let row=0; row<rowsCount; row++) {
         const cells = new Array(colsCount)
         .fill('')
-        .map(createCell(state, row))
+        .map(createCell(state.colState, row))
         .join('')
     
-    rows.push(createRow(row + 1, cells))
+    rows.push(createRow(row + 1, cells, state.rowState))
     }
     
 

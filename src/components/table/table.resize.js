@@ -39,7 +39,9 @@ export function resizeHandler($root, event, type) {
 
                 resolve({
                     value,
-                    id: type === 'col' ? $parent.$el.dataset.col : null
+                    type,
+                    // id: type === 'col' ? $parent.$el.dataset.col : $parent.$el.dataset.row
+                    id : $parent.$el.dataset[type]
                 })
                 document.onmousemove = null
                 document.onmouseup = null
