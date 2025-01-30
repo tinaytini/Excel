@@ -1,0 +1,97 @@
+.excel__table {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 108px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+.excel__table .row {
+  display: flex;
+  flex-direction: row;
+  min-height: 20px;
+  height: 24px;
+}
+.excel__table .row_info {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 40px;
+  height: 100%;
+  border: 1px solid #c0c0c0;
+  background-color: #f8f9fa;
+  border-top: none;
+}
+.excel__table .row_data {
+  display: flex;
+}
+.excel__table .column {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f9fa;
+  min-width: 40px;
+  width: 140px;
+  border: 1px solid #c0c0c0;
+  border-top: 0;
+  border-left: 0;
+  height: 100%;
+}
+.excel__table .cell {
+  position: relative;
+  min-width: 40px;
+  padding: 5px;
+  width: 140px;
+  height: 100%;
+  border: 1px solid #e2e2e3;
+  border-top: 0;
+  border-left: 0;
+  color: #111;
+  white-space: nowrap;
+  outline: none;
+}
+.excel__table .cell::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  width: 4px;
+  background-color: #3c74ff;
+  opacity: 0;
+}
+.cell.active .excel__table .cell {
+  opacity: 1;
+}
+.excel__table .cell.selected {
+  border: none;
+  outline: 2px solid #3c74ff;
+  z-index: 2;
+  font-size: 0.8rem;
+}
+.excel__table .col-resize, .excel__table .row-resize {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #3c74ff;
+  opacity: 0;
+}
+.excel__table .col-resize:hover, .excel__table .row-resize:hover {
+  opacity: 1 !important;
+}
+.excel__table .col-resize {
+  top: 0;
+  width: 4px;
+}
+.excel__table .col-resize:hover {
+  cursor: col-resize;
+}
+.excel__table .row-resize {
+  left: 0;
+  height: 4px;
+}
+.excel__table .row-resize:hover {
+  cursor: row-resize;
+}/*# sourceMappingURL=table.css.map */

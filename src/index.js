@@ -8,8 +8,9 @@ import { CreateStore } from "./core/createStore";
 import { rootReducer } from "./redux/rootReducer";
 import { storage } from "./core/utils";
 import './scss/index.scss';
+import { initialState } from "./redux/initialState";
 
-const store = new CreateStore(rootReducer, storage('excel-state'))
+const store = new CreateStore(rootReducer, initialState)
 
 store.subscribe(state => {
     console.log('appstate', state)
